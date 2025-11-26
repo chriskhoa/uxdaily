@@ -1,22 +1,20 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Text } from "react-native";
 
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import MainScreen from "./screens/MainScreen";
 
-const RootStack = createNativeStackNavigator({
-  initialRouteName: "Login",
-  screens: {
-    Login: LoginScreen,
-    Signup: SignupScreen,
-    Main: MainScreen,
-  },
-});
-
-const Navigation = createStaticNavigation(RootStack);
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  return <Navigation />;
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Signup" component={SignupScreen} />
+        <Stack.Screen name="Main" component={MainScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }

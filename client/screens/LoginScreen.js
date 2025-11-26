@@ -5,8 +5,8 @@ function LoginScreen({ navigation, route }) {
   return (
     <View>
       <Text>This is Login</Text>
-      <Button>Signup</Button>
-      <Button>Login</Button>
+      <Button title="Sign up" onPress={() => navigation.navigate("Signup")} />
+      <Button title="Login" onPress={() => navigation.navigate("Main")} />
     </View>
   );
 }
