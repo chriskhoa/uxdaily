@@ -1,10 +1,13 @@
-import { View, Text } from "react-native";
+import { View, Text, TextInput } from "react-native";
 import TextField from "../components/ui/TextField";
-import Typography from "../components/ui/Typography";
 import Button from "../components/ui/Button";
+import { useState } from "react";
 
 // login screen
 function LoginScreen({ navigation, route }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <View
       style={{
@@ -19,7 +22,7 @@ function LoginScreen({ navigation, route }) {
         <Text
           style={{
             fontSize: 40,
-            fontWeight: "700", // Extra bold
+            fontWeight: "700",
           }}
         >
           UX DAILY
@@ -31,8 +34,13 @@ function LoginScreen({ navigation, route }) {
           gap: 0,
         }}
       >
-        <TextField placeholder="username" />
-        <TextField placeholder="password" />
+        <TextField placeholder="email" value={email} onChangeText={setEmail} />
+        <TextField
+          placeholder="password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={true}
+        />
       </View>
       <View
         style={{

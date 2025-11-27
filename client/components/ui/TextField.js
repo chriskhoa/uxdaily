@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 const TextField = ({
@@ -17,9 +23,11 @@ const TextField = ({
   unit = "",
   state = "default", // 'default', 'active', 'disabled', 'error'
   multiline = false,
+  secureTextEntry = false,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const getStateStyles = () => {
     if (state === "error") {
@@ -72,8 +80,24 @@ const TextField = ({
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           multiline={multiline}
+          secureTextEntry={secureTextEntry && !isPasswordVisible}
           {...props}
         />
+
+        {/* Password Toggle Icon */}
+        {secureTextEntry && (
+          <TouchableOpacity
+            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+            disabled={state === "disabled"}
+            style={styles.eyeIcon}
+          >
+            <Ionicons
+              name={isPasswordVisible ? "eye" : "eye-off"}
+              size={20}
+              color={state === "disabled" ? "#A0A0A0" : "#666666"}
+            />
+          </TouchableOpacity>
+        )}
 
         {/* Unit */}
         {showUnit && unit && (
@@ -135,6 +159,10 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 8,
+  },
+  eyeIcon: {
+    // marginLeft: 8,
+    // padding: 4,
   },
   input: {
     flex: 1,

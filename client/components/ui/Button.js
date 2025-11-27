@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 const Button = ({
   variant = "primary", // 'primary', 'secondary', 'tertiary'
+  status = "normal", // 'normal', 'warning', 'success'
   text = "Button",
   showText = true,
   onPress,
@@ -35,6 +36,34 @@ const Button = ({
       return baseStyle;
     }
 
+    // Apply status colors with variants
+    if (status === "warning") {
+      switch (variant) {
+        case "primary":
+          return [...baseStyle, styles.buttonWarningPrimary];
+        case "secondary":
+          return [...baseStyle, styles.buttonWarningSecondary];
+        case "tertiary":
+          return [...baseStyle, styles.buttonWarningTertiary];
+        default:
+          return [...baseStyle, styles.buttonWarningPrimary];
+      }
+    }
+
+    if (status === "success") {
+      switch (variant) {
+        case "primary":
+          return [...baseStyle, styles.buttonSuccessPrimary];
+        case "secondary":
+          return [...baseStyle, styles.buttonSuccessSecondary];
+        case "tertiary":
+          return [...baseStyle, styles.buttonSuccessTertiary];
+        default:
+          return [...baseStyle, styles.buttonSuccessPrimary];
+      }
+    }
+
+    // Apply variant styles for normal status
     switch (variant) {
       case "primary":
         return [...baseStyle, styles.buttonPrimary];
@@ -54,6 +83,21 @@ const Button = ({
       return [...baseStyle, styles.textDisabled];
     }
 
+    // Status colors
+    if (status === "warning") {
+      if (variant === "primary") {
+        return [...baseStyle, styles.textPrimary]; // white text for filled
+      }
+      return [...baseStyle, styles.textWarning]; // warning color for secondary/tertiary
+    }
+
+    if (status === "success") {
+      if (variant === "primary") {
+        return [...baseStyle, styles.textPrimary]; // white text for filled
+      }
+      return [...baseStyle, styles.textSuccess]; // success color for secondary/tertiary
+    }
+
     switch (variant) {
       case "primary":
         return [...baseStyle, styles.textPrimary];
@@ -68,6 +112,21 @@ const Button = ({
 
   const getIconColor = () => {
     if (disabled) return "#A0A0A0";
+
+    // Status colors
+    if (status === "warning") {
+      if (variant === "primary") {
+        return "#FFFFFF"; // white icon for filled
+      }
+      return "#ff616d"; // warning color for secondary/tertiary
+    }
+
+    if (status === "success") {
+      if (variant === "primary") {
+        return "#FFFFFF"; // white icon for filled
+      }
+      return "#298267"; // success color for secondary/tertiary
+    }
 
     switch (variant) {
       case "primary":
@@ -90,10 +149,7 @@ const Button = ({
       {...props}
     >
       {loading ? (
-        <ActivityIndicator
-          color={variant === "primary" ? "#FFFFFF" : "#2196F3"}
-          size="small"
-        />
+        <ActivityIndicator color={getIconColor()} size="small" />
       ) : (
         <View style={styles.content}>
           {/* Left Icon */}
@@ -161,6 +217,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
 
+  // Warning Status Variants
+  buttonWarningPrimary: {
+    backgroundColor: "#ff616d",
+  },
+  buttonWarningSecondary: {
+    backgroundColor: "transparent",
+    borderWidth: 1.5,
+    borderColor: "#ff616d",
+  },
+  buttonWarningTertiary: {
+    backgroundColor: "transparent",
+    paddingHorizontal: 12,
+  },
+
+  // Success Status Variants
+  buttonSuccessPrimary: {
+    backgroundColor: "#298267",
+  },
+  buttonSuccessSecondary: {
+    backgroundColor: "transparent",
+    borderWidth: 1.5,
+    borderColor: "#298267",
+  },
+  buttonSuccessTertiary: {
+    backgroundColor: "transparent",
+    paddingHorizontal: 12,
+  },
+
   // Disabled State
   buttonDisabled: {
     backgroundColor: "#F5F5F5",
@@ -181,6 +265,12 @@ const styles = StyleSheet.create({
   },
   textTertiary: {
     color: "#2196F3",
+  },
+  textWarning: {
+    color: "#ff616d",
+  },
+  textSuccess: {
+    color: "#298267",
   },
   textDisabled: {
     color: "#A0A0A0",
