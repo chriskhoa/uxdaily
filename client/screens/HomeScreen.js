@@ -10,10 +10,6 @@ function HomeScreen({ navigation, route }) {
         backgroundColor: "white",
         alignItems: "center",
       }}
-      //   contentContainerStyle={{
-      //     alignItems: "center",
-      //     paddingVertical: 20,
-      //   }}
     >
       <View
         style={{
