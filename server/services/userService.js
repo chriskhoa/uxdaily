@@ -19,20 +19,24 @@ const SALT_ROUNDS = 11;
 
 const add = async (name, email, password) => {
   // 1. check if username already exists, error if yes
-  const user = await db.getFromCollectionByFieldValue(db.USERS, "email", email);
-  if (user) {
+  const existingUser = await db.getFromCollectionByFieldValue(db.USERS, "email", email);
+  if (existingUser) {
     throw new Error("account already exists");
   }
 
   // 2. hash password
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-  // 3. save user record
-  const result = await db.addToCollection(db.USERS, {
+  // 3. create user instance with defaults
+  const user = new User({
     name,
     email,
     hashedPassword,
   });
+
+  // 4. save user record with all default fields
+  const { id, ...userDataToSave } = user;
+  const result = await db.addToCollection(db.USERS, userDataToSave);
   if (!result.acknowledged || !result.insertedId) {
     throw new Error("error adding user to DB");
   }
