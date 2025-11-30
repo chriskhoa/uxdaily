@@ -24,8 +24,8 @@ Figma link: to be added
 
 ## Tech stack
 
-Frontend: React Native, Expo App, Tamagui component library
-State management: Redux
+Frontend: React Native, Expo App
+State management: ??
 Backend: restAPI, Express, Node.js
 Database: MongoDb
 
