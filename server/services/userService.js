@@ -19,9 +19,15 @@ const SALT_ROUNDS = 11;
 
 const add = async (name, email, password) => {
   // 1. check if username already exists, error if yes
-  const existingUser = await db.getFromCollectionByFieldValue(db.USERS, "email", email);
+  const existingUser = await db.getFromCollectionByFieldValue(
+    db.USERS,
+    "email",
+    email
+  );
   if (existingUser) {
-    throw new Error("account already exists");
+    throw new Error(
+      "Account with this email already exists. Please try a different email."
+    );
   }
 
   // 2. hash password

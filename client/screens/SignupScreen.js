@@ -4,11 +4,14 @@ import Button from "../components/ui/Button";
 import TextField from "../components/ui/TextField";
 import Typography from "../components/ui/Typography";
 
+import { createUser } from "../data/users";
+
 function SignupScreen({ navigation, route }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmedPass, setConfirmedPass] = useState("");
+  const [error, setError] = useState("");
+  // const [confirmedPass, setConfirmedPass] = useState("");
 
   return (
     <View
@@ -54,17 +57,18 @@ function SignupScreen({ navigation, route }) {
           onChangeText={setPassword}
           secureTextEntry={true}
         ></TextField>
-        <TextField
+        {/* <TextField
           placeholder="Confirm password"
           secureTextEntry={true}
           value={confirmedPass}
           onChangeText={setConfirmedPass}
-        ></TextField>
-        {password !== confirmedPass ? (
+        ></TextField> */}
+        {/* {password !== confirmedPass ? (
           <Typography color={"#ff616d"}>Passwords must match</Typography>
         ) : (
           <></>
-        )}
+        )} */}
+        {error ? <Typography color={"#ff616d"}>{error}</Typography> : null}
       </View>
       <View
         style={{
@@ -72,7 +76,35 @@ function SignupScreen({ navigation, route }) {
           gap: 10,
         }}
       >
-        <Button onPress={() => navigation.navigate("Login")} text="Sign up" />
+        <Button
+          text="Sign up"
+          onPress={async () => {
+            try {
+              setError("");
+
+              // Validate input fields
+              if (!name.trim()) {
+                setError("Name is required");
+                return;
+              }
+              if (!email.trim()) {
+                setError("Email is required");
+                return;
+              }
+              if (!password) {
+                setError("Password is required");
+                return;
+              }
+
+              await createUser(name, email, password);
+              navigation.navigate("Login");
+            } catch (err) {
+              setError(
+                "Account with this email already exists. Please try a different email."
+              );
+            }
+          }}
+        />
         <Button
           variant="secondary"
           onPress={() => navigation.navigate("Login")}

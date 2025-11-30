@@ -1,42 +1,33 @@
-// Sample user data for quick front-end testing
-export default users = [
-  {
-    id: "user01",
-    name: "Chris",
-    email: "Chris@email.com",
-    password: "passchris",
-    settings: {
-      notificationsEnabled: true,
-      reminderTime: "19:00",
-      soundEnabled: true,
-    },
-    lessonsCompleted: 3, //enable lesson 4 and lock lesson 5+
-    mistakes: [], //list of wrong exercise id
-  },
-  {
-    id: "user02",
-    name: "Amy",
-    email: "Amy@email.com",
-    password: "passamy",
-    settings: {
-      notificationsEnabled: true,
-      reminderTime: "19:00",
-      soundEnabled: true,
-    },
-    lessonsCompleted: 0,
-    mistakes: [],
-  },
-  {
-    id: "user03",
-    name: "John",
-    email: "John@email.com",
-    password: "passjohn",
-    settings: {
-      notificationsEnabled: true,
-      reminderTime: "19:00",
-      soundEnabled: true,
-    },
-    lessonsCompleted: 0,
-    mistakes: [],
-  },
-];
+import { handleGet, handlePost, handlePatch, USERS_ENDPOINT } from "./api";
+
+const getUserById = async (id) => {
+  const user = await handleGet(`${USERS_ENDPOINT}/${id}`);
+  return user;
+};
+
+const createUser = async (name, email, password) => {
+  const newUser = await handlePost(USERS_ENDPOINT, {
+    name,
+    email,
+    password,
+  });
+  return newUser;
+};
+
+const updateUser = async (id, updatedFields) => {
+  const updatedUser = await handlePatch(
+    `${USERS_ENDPOINT}/${id}`,
+    updatedFields
+  );
+  return updatedUser;
+};
+
+const validateLogin = async (email, password) => {
+  const user = await handlePost(`${USERS_ENDPOINT}/login`, {
+    email,
+    password,
+  });
+  return user;
+};
+
+export { getUserById, createUser, updateUser, validateLogin };
