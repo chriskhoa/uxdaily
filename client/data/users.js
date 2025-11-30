@@ -2,7 +2,7 @@
 export default users = [
   {
     id: "user01",
-    username: "Chris",
+    name: "Chris",
     email: "Chris@email.com",
     password: "passchris",
     settings: {
@@ -15,7 +15,7 @@ export default users = [
   },
   {
     id: "user02",
-    username: "Amy",
+    name: "Amy",
     email: "Amy@email.com",
     password: "passamy",
     settings: {
@@ -28,7 +28,7 @@ export default users = [
   },
   {
     id: "user03",
-    username: "John",
+    name: "John",
     email: "John@email.com",
     password: "passjohn",
     settings: {
