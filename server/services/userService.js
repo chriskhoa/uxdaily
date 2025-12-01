@@ -100,6 +100,9 @@ const updateById = async (id, userInfo) => {
   }
   ///////////
   await db.updateToCollectionById(db.USERS, id, userInfo);
+  // Fetch and return the updated user
+  const updatedUser = await getById(id);
+  return updatedUser;
 };
 
 const deleteIt = async (id) => {

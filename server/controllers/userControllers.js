@@ -42,8 +42,9 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { id } = req.params;
-  const result = await userService.updateById(id, req.body);
-  res.json(result);
+  const updatedUser = await userService.updateById(id, req.body);
+  delete updatedUser.hashedPassword; // Don't send password to client
+  res.json(updatedUser);
 };
 
 export const userControllers = {

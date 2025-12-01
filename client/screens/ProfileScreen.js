@@ -92,6 +92,7 @@ function ProfileScreen({ navigation, route }) {
           <Button text="Save changes" onPress={() => setEdit("disabled")} />
           <Button
             text="Cancel changes"
+            variant="secondary"
             status="warning"
             onPress={() => setEdit("disabled")}
           />
