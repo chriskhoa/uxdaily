@@ -1,12 +1,16 @@
-import { View, Text, TextInput } from "react-native";
+import { View, Text } from "react-native";
 import TextField from "../components/ui/TextField";
 import Button from "../components/ui/Button";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginThunk } from "../features/userSlice";
 
 // login screen
-function LoginScreen({ navigation, route }) {
+function LoginScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   return (
     <View
@@ -42,13 +46,31 @@ function LoginScreen({ navigation, route }) {
           secureTextEntry={true}
         />
       </View>
+      {error ? (
+        <Text style={{ color: "red", fontSize: 14 }}>{error}</Text>
+      ) : null}
       <View
         style={{
           width: "80%",
           gap: 10,
         }}
       >
-        <Button onPress={() => navigation.navigate("Main")} text="Login" />
+        <Button
+          text="Login"
+          onPress={async () => {
+            try {
+              setError("");
+              const result = await dispatch(loginThunk({ email, password }));
+              if (result.type === loginThunk.fulfilled.type) {
+                navigation.navigate("Main");
+              } else {
+                setError("Login failed. Please check your credentials.");
+              }
+            } catch (err) {
+              setError("An error occurred. Please try again.");
+            }
+          }}
+        />
         <Button
           variant="tertiary"
           onPress={() => navigation.navigate("Signup")}
