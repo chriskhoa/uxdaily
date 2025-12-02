@@ -3,7 +3,7 @@ import Typography from "../components/ui/Typography";
 import Button from "../components/ui/Button";
 import NavBar from "../components/ui/NavBar";
 
-function LessonScreen({ navigation, route }) {
+function AskAIScreen({ navigation, route }) {
   return (
     <View
       style={{
@@ -17,21 +17,13 @@ function LessonScreen({ navigation, route }) {
     >
       <View style={{ marginTop: 70, width: "100%" }}>
         <NavBar
-          title="Lesson"
+          title="Ask AI"
           showBorder={false}
           onLeftPress={() => navigation.goBack()}
         ></NavBar>
-      </View>
-      <View style={{ width: "80%", gap: 10, marginBottom: 30 }}>
-        <Button
-          variant="secondary"
-          text="Ask AI"
-          onPress={() => navigation.navigate("AI")}
-        ></Button>
-        <Button text="Next"></Button>
       </View>
     </View>
   );
 }
 
-export default LessonScreen;
+export default AskAIScreen;
