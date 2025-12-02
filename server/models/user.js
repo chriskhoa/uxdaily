@@ -9,6 +9,7 @@ class User {
     soundEnabled: false,
   };
   lessonsCompleted = 0;
+  mistakes = [];
 
   constructor(userFields) {
     const id = userFields.id ?? String(Date.now());
@@ -29,7 +30,8 @@ class User {
       };
     }
 
-    this.lessonsCompleted = userFields.lessonsCompleted ?? this.lessonsCompleted;
+    this.lessonsCompleted =
+      userFields.lessonsCompleted ?? this.lessonsCompleted;
   };
 
   static fromUserDocument = (userDocument) => {

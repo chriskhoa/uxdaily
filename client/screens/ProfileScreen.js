@@ -87,7 +87,7 @@ function ProfileScreen({ navigation }) {
         alignItems: "center",
         backgroundColor: "white",
         gap: 20,
-        marginBottom: 10,
+        // marginBottom: 10,
       }}
     >
       <View style={{ marginTop: 70 }}>
@@ -191,6 +191,7 @@ function ProfileScreen({ navigation }) {
           style={{
             width: "80%",
             gap: 10,
+            marginBottom: 10,
           }}
         >
           <Button text="Edit profile" onPress={() => setEdit("default")} />
