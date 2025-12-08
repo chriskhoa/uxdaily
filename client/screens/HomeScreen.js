@@ -2,8 +2,12 @@ import { View, FlatList } from "react-native";
 import Card from "../components/ui/Card";
 import Typography from "../components/ui/Typography";
 import lessons from "../data/lessons";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUserThunk } from "../features/userSlice";
 
 function HomeScreen({ navigation, route }) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.user);
   return (
     <View
       style={{
@@ -30,7 +34,11 @@ function HomeScreen({ navigation, route }) {
           return (
             <View style={{ marginBottom: 20 }}>
               <Card
-                status="start"
+                status={
+                  user.lessonsCompleted?.includes(item.id)
+                    ? "complete"
+                    : "start"
+                }
                 title={item.title}
                 subtitle={item.description}
                 onPress={() => navigation.navigate("Lesson", { lesson: item })}

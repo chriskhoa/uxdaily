@@ -40,7 +40,7 @@ Place important information (like buttons or text) where users look directly. Do
         type: "quiz",
         image: null,
         question:
-          "Fill in the blank: Critical information should NOT be placed at screen edges because it falls in **_** vision where details are less clear.",
+          "Fill in the blank: Critical information should NOT be placed at screen edges because it falls in _____ vision where details are less clear.",
         correctAnswers: ["peripheral", "Peripheral"],
       },
       {
@@ -84,7 +84,7 @@ A red notification dot on a gray icon. Your eye finds it instantly!`,
         type: "quiz",
         image: null,
         question:
-          "When one element differs significantly in color, size, or shape, it 'pops out' and grabs attention immediately. This is called the **_**-**_** effect.",
+          "When one element differs significantly in color, size, or shape, it 'pops out' and grabs attention immediately. This is called the _____ effect.",
         correctAnswers: ["pop-out", "pop out", "Pop-out", "Pop out"],
       },
       {
@@ -145,7 +145,7 @@ Navigation icons grouped at the bottom of an app feel like one menu, even withou
         type: "quiz",
         image: null,
         question:
-          "The Gestalt principle of **_** explains why items that look alike (same color, shape, or size) are perceived as related.",
+          "The Gestalt principle of _____ explains why items that look alike (same color, shape, or size) are perceived as related.",
         correctAnswers: ["similarity", "Similarity"],
       },
     ],
@@ -196,7 +196,7 @@ Design interfaces that balance these factors. High-value actions should be salie
         type: "quiz",
         image: null,
         question:
-          "A flashing red error message grabs attention because of its high **_** (how much it stands out visually).",
+          "A flashing red error message grabs attention because of its high _____ (how much it stands out visually).",
         correctAnswers: ["salience", "Salience"],
       },
       {
@@ -259,7 +259,7 @@ Use bottom-up cues (motion, color) sparingly for truly important alerts. Don't f
         type: "quiz",
         image: null,
         question:
-          "When you're actively looking for the 'Download' button on a website, you're using **_**-**_** attention.",
+          "When you're actively looking for the 'Download' button on a website, you're using _____ attention.",
         correctAnswers: ["top-down", "top down", "Top-down", "Top down"],
       },
       {
@@ -366,7 +366,7 @@ Don't overwhelm users with too many:
         type: "quiz",
         image: null,
         question:
-          "Breaking information into smaller groups (like phone numbers: 555-123-4567) makes it easier to remember. This technique is called **_**.",
+          "Breaking information into smaller groups (like phone numbers: 555-123-4567) makes it easier to remember. This technique is called _____.",
         correctAnswers: ["chunking", "Chunking"],
       },
       {
@@ -436,7 +436,7 @@ Design interfaces that rely on **recognition** rather than **recall**:
         type: "quiz",
         image: null,
         question:
-          "Identifying information when you see it is called **_**, and it's easier than retrieving information from memory without cues.",
+          "Identifying information when you see it is called _____, and it's easier than retrieving information from memory without cues.",
         correctAnswers: ["recognition", "Recognition"],
       },
       {
@@ -551,7 +551,7 @@ When designs violate mental models, users feel confused and frustrated.
         type: "quiz",
         image: null,
         question:
-          "A shopping cart icon works well in e-commerce because it matches users' **_** **_** from physical stores.",
+          "A shopping cart icon works well in e-commerce because it matches users' _____ from physical stores.",
         correctAnswers: ["mental model", "Mental model", "mental Model"],
       },
       {
@@ -616,7 +616,7 @@ Users shouldn't have to guess how to interact with your interface. Strong afford
         type: "quiz",
         image: null,
         question:
-          "Blue underlined text affords **_** or **_** because users have learned this convention from years of web browsing.",
+          "Blue underlined text affords _____ or _____ because users have learned this convention from years of web browsing.",
         correctAnswers: [
           "clicking tapping",
           "tapping clicking",
@@ -734,7 +734,7 @@ Small or distant targets slow users down and cause errors.
         type: "quiz",
         image: null,
         question:
-          "According to Fitts's Law, targets that are **_** and **_** are fastest to select.",
+          "According to Fitts's Law, targets that are _____ and _____ are fastest to select.",
         correctAnswers: [
           "larger closer",
           "closer larger",
@@ -805,7 +805,7 @@ Reduce choices to speed up decisions:
         type: "quiz",
         image: null,
         question:
-          "According to Hick's Law, more choices lead to **_** decision times.",
+          "According to Hick's Law, more choices lead to _____ decision times.",
         correctAnswers: [
           "longer",
           "Longer",

@@ -64,12 +64,22 @@ function LessonScreen({ navigation, route }) {
   };
 
   // Handle next exercise
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentExerciseIndex < totalExercises - 1) {
       setCurrentExerciseIndex(currentExerciseIndex + 1);
       resetExerciseState();
     } else {
-      // Lesson completed
+      // Lesson completed - only update if not already completed
+      const isAlreadyCompleted = user.lessonsCompleted?.includes(lesson.id);
+
+      if (!isAlreadyCompleted) {
+        const updates = {
+          id: user.id,
+          lessonsCompleted: [...(user.lessonsCompleted || []), lesson.id],
+        };
+        await dispatch(updateUserThunk(updates));
+      }
+
       navigation.goBack();
     }
   };
@@ -108,6 +118,7 @@ function LessonScreen({ navigation, route }) {
             onChangeText={setTextAnswer}
             isAnswerChecked={isAnswerChecked}
             isCorrect={isCorrect}
+            correctAnswer={currentExercise.correctAnswers[0]}
           />
         );
 
@@ -192,7 +203,7 @@ function LessonScreen({ navigation, route }) {
               variant="body"
               style={isCorrect ? styles.correctText : styles.incorrectText}
             >
-              {isCorrect ? "✓ Correct!" : "✗ Incorrect. Try again!"}
+              {isCorrect ? "✓ Correct!" : "✗ Incorrect!"}
             </Typography>
           </View>
         )}
@@ -217,52 +228,97 @@ function LessonScreen({ navigation, route }) {
 
 // Reading Exercise Component
 function ReadingExercise({ content }) {
+  // Render a single line with inline bold text
+  const renderLineWithBold = (line, key) => {
+    const parts = line.split(/(\*\*.*?\*\*)/g).filter((part) => part !== "");
+    return (
+      <Text key={key} style={styles.paragraph}>
+        {parts.map((part, i) => {
+          if (part.startsWith("**") && part.endsWith("**")) {
+            return (
+              <Text key={i} style={styles.inlineBold}>
+                {part.replace(/\*\*/g, "")}
+              </Text>
+            );
+          }
+          return <Text key={i}>{part}</Text>;
+        })}
+      </Text>
+    );
+  };
+
   // Simple markdown-like rendering
   const renderContent = () => {
     const lines = content.split("\n");
     return lines.map((line, index) => {
+      // Headings
       if (line.startsWith("# ")) {
         return (
-          <Typography key={index} variant="h1" style={styles.heading1}>
+          <Text key={index} style={styles.heading1}>
             {line.replace("# ", "")}
-          </Typography>
+          </Text>
         );
       } else if (line.startsWith("## ")) {
         return (
-          <Typography key={index} variant="h2" style={styles.heading2}>
+          <Text key={index} style={styles.heading2}>
             {line.replace("## ", "")}
-          </Typography>
+          </Text>
         );
-      } else if (line.startsWith("**") && line.endsWith("**")) {
+      }
+      // Bullet points (handle inline bold in bullets)
+      else if (line.startsWith("- ")) {
+        const bulletText = line.replace("- ", "");
+        if (bulletText.includes("**")) {
+          const parts = bulletText
+            .split(/(\*\*.*?\*\*)/g)
+            .filter((part) => part !== "");
+          return (
+            <Text key={index} style={styles.bulletPoint}>
+              {"• "}
+              {parts.map((part, i) => {
+                if (part.startsWith("**") && part.endsWith("**")) {
+                  return (
+                    <Text key={i} style={styles.inlineBold}>
+                      {part.replace(/\*\*/g, "")}
+                    </Text>
+                  );
+                }
+                return <Text key={i}>{part}</Text>;
+              })}
+            </Text>
+          );
+        }
         return (
-          <Typography key={index} variant="body" style={styles.bold}>
-            {line.replace(/\*\*/g, "")}
-          </Typography>
+          <Text key={index} style={styles.bulletPoint}>
+            • {bulletText}
+          </Text>
         );
-      } else if (line.startsWith("- ")) {
-        return (
-          <Typography key={index} variant="body" style={styles.bulletPoint}>
-            • {line.replace("- ", "")}
-          </Typography>
-        );
-      } else if (line.trim() === "") {
+      }
+      // Empty lines
+      else if (line.trim() === "") {
         return <View key={index} style={styles.spacer} />;
-      } else {
-        // Handle inline bold text
-        const parts = line.split(/(\*\*.*?\*\*)/g);
+      }
+      // Lines that are entirely bold
+      else if (
+        line.startsWith("**") &&
+        line.endsWith("**") &&
+        !line.slice(2, -2).includes("**")
+      ) {
         return (
-          <Typography key={index} variant="body" style={styles.paragraph}>
-            {parts.map((part, i) => {
-              if (part.startsWith("**") && part.endsWith("**")) {
-                return (
-                  <Text key={i} style={styles.inlineBold}>
-                    {part.replace(/\*\*/g, "")}
-                  </Text>
-                );
-              }
-              return <Text key={i}>{part}</Text>;
-            })}
-          </Typography>
+          <Text key={index} style={styles.bold}>
+            {line.replace(/\*\*/g, "")}
+          </Text>
+        );
+      }
+      // Regular paragraphs with potential inline bold
+      else {
+        if (line.includes("**")) {
+          return renderLineWithBold(line, index);
+        }
+        return (
+          <Text key={index} style={styles.paragraph}>
+            {line}
+          </Text>
         );
       }
     });
@@ -331,6 +387,7 @@ function QuizExercise({
   onChangeText,
   isAnswerChecked,
   isCorrect,
+  correctAnswer,
 }) {
   return (
     <View style={styles.quizContainer}>
@@ -351,6 +408,9 @@ function QuizExercise({
         autoCapitalize="none"
         autoCorrect={false}
       />
+      {isAnswerChecked && (
+        <Typography style={styles.incorrectText}>{correctAnswer}</Typography>
+      )}
     </View>
   );
 }
@@ -519,8 +579,6 @@ const styles = StyleSheet.create({
   bottomContainer: {
     padding: 20,
     gap: 10,
-    borderTopWidth: 1,
-    borderTopColor: "#E5E5E5",
   },
 });
 
