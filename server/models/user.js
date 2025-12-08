@@ -8,7 +8,7 @@ class User {
     reminderTime: "00:00",
     soundEnabled: false,
   };
-  lessonsCompleted = 0;
+  lessonsCompleted = [];
   mistakes = [];
 
   constructor(userFields) {

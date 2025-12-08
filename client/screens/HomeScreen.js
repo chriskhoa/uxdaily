@@ -33,7 +33,7 @@ function HomeScreen({ navigation, route }) {
                 status="start"
                 title={item.title}
                 subtitle={item.description}
-                onPress={() => navigation.navigate("Lesson")}
+                onPress={() => navigation.navigate("Lesson", { lesson: item })}
               />
             </View>
           );
