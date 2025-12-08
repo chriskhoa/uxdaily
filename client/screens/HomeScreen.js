@@ -1,6 +1,7 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, FlatList } from "react-native";
 import Card from "../components/ui/Card";
 import Typography from "../components/ui/Typography";
+import lessons from "../data/lessons";
 
 function HomeScreen({ navigation, route }) {
   return (
@@ -18,24 +19,26 @@ function HomeScreen({ navigation, route }) {
       >
         <Typography variant="h1">Your Learning</Typography>
       </View>
-
-      <ScrollView
+      <FlatList
         style={{
           width: "100%",
           marginTop: 20,
           padding: 20,
         }}
-      >
-        <Card status="complete" />
-        <Card status="complete" />
-        <Card status="complete" />
-        <Card status="complete" />
-        <Card status="start" onPress={() => navigation.navigate("Lesson")} />
-        <Card status="to start" />
-        <Card status="to start" />
-        <Card status="to start" />
-        <Card status="to start" />
-      </ScrollView>
+        data={lessons}
+        renderItem={({ item }) => {
+          return (
+            <View style={{ marginBottom: 20 }}>
+              <Card
+                status="start"
+                title={item.title}
+                subtitle={item.description}
+                onPress={() => navigation.navigate("Lesson")}
+              />
+            </View>
+          );
+        }}
+      />
     </View>
   );
 }

@@ -63,10 +63,10 @@ const Card = ({
     >
       {/* Text Content */}
       <View style={styles.textContainer}>
-        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
           {title}
         </Text>
-        <Text style={styles.subtitle} numberOfLines={1} ellipsizeMode="tail">
+        <Text style={styles.subtitle} numberOfLines={3} ellipsizeMode="tail">
           {subtitle}
         </Text>
       </View>
@@ -81,31 +81,34 @@ const Card = ({
 
 const styles = StyleSheet.create({
   card: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
     justifyContent: "space-between",
     borderRadius: 12,
     padding: 20,
     marginBottom: 16,
-    minHeight: 100,
+    minHeight: 200,
+    width: "100%",
+    alignSelf: "center",
   },
   textContainer: {
     flex: 1,
-    marginRight: 16,
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    marginBottom: 12,
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "600",
     color: "#000000",
-    marginBottom: 4,
+    marginBottom: 8,
+    lineHeight: 28,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 15,
     color: "#666666",
+    lineHeight: 20,
   },
   buttonContainer: {
-    flexShrink: 0,
+    alignSelf: "flex-end",
   },
   button: {
     paddingHorizontal: 20,
