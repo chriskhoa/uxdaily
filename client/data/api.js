@@ -55,4 +55,21 @@ const handlePatch = async (url, body, queryParams = null) => {
   }
 };
 
-export { handleGet, handlePost, handlePatch, USERS_ENDPOINT };
+const handleDelete = async (url, queryParams = null) => {
+  if (queryParams) {
+    url = buildUrlWithQuery(url, queryParams);
+  }
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (response.ok) {
+    return response.statusText;
+  } else {
+    throw new Error(`DELETE request to ${url} failed: ${response.statusText}`);
+  }
+};
+
+export { handleGet, handlePost, handlePatch, handleDelete, USERS_ENDPOINT };

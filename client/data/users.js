@@ -1,4 +1,10 @@
-import { handleGet, handlePost, handlePatch, USERS_ENDPOINT } from "./api";
+import {
+  handleGet,
+  handlePost,
+  handlePatch,
+  handleDelete,
+  USERS_ENDPOINT,
+} from "./api";
 
 const getUserById = async (id) => {
   const user = await handleGet(`${USERS_ENDPOINT}/${id}`);
@@ -30,6 +36,10 @@ const validateLogin = async (email, password) => {
   return user;
 };
 
+const deleteUser = async (id) => {
+  await handleDelete(`${USERS_ENDPOINT}/${id}`);
+};
+
 const addMistake = async (id, exerciseId, lessonId) => {
   const updatedUser = await handlePost(`${USERS_ENDPOINT}/${id}/mistakes`, {
     exerciseId,
@@ -38,4 +48,11 @@ const addMistake = async (id, exerciseId, lessonId) => {
   return updatedUser;
 };
 
-export { getUserById, createUser, updateUser, validateLogin, addMistake };
+export {
+  getUserById,
+  createUser,
+  updateUser,
+  validateLogin,
+  deleteUser,
+  addMistake,
+};

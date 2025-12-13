@@ -35,7 +35,7 @@ function HomeScreen({ navigation, route }) {
             <View style={{ marginBottom: 20 }}>
               <Card
                 status={
-                  user.lessonsCompleted?.includes(item.id)
+                  user?.lessonsCompleted?.includes(item.id)
                     ? "complete"
                     : "start"
                 }

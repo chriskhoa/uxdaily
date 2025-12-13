@@ -65,7 +65,7 @@ function LessonScreen({ navigation, route }) {
     }
 
     // Track mistake if answer is incorrect
-    if (!correct) {
+    if (!correct && user) {
       const exerciseId = currentExercise.id;
       const alreadyInMistakes = user.mistakes?.some(
         (mistake) => mistake.exerciseId === exerciseId
@@ -90,9 +90,9 @@ function LessonScreen({ navigation, route }) {
       resetExerciseState();
     } else {
       // Lesson completed - only update if not already completed
-      const isAlreadyCompleted = user.lessonsCompleted?.includes(lesson.id);
+      const isAlreadyCompleted = user?.lessonsCompleted?.includes(lesson.id);
 
-      if (!isAlreadyCompleted) {
+      if (!isAlreadyCompleted && user) {
         const updates = {
           id: user.id,
           lessonsCompleted: [...(user.lessonsCompleted || []), lesson.id],

@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { View, Switch } from "react-native";
+import { useState, useCallback } from "react";
+import { View, Switch, Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useFocusEffect } from "@react-navigation/native";
 import TextField from "../components/ui/TextField";
 import Typography from "../components/ui/Typography";
 import Button from "../components/ui/Button";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUserThunk } from "../features/userSlice";
+import { updateUserThunk, deleteUserThunk } from "../features/userSlice";
 
 // Helper function to convert "HH:MM" string to Date object
 const timeStringToDate = (timeString) => {
@@ -44,6 +45,13 @@ function ProfileScreen({ navigation }) {
       : new Date()
   );
   const [edit, setEdit] = useState("disabled");
+
+  // AI supported code to reset edit mode whenever the screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      setEdit("disabled");
+    }, [])
+  );
 
   const handleSaveChanges = async () => {
     const updates = {
@@ -178,6 +186,37 @@ function ProfileScreen({ navigation }) {
             gap: 10,
           }}
         >
+          <View
+            style={{
+              alignItems: "flex-end",
+            }}
+          >
+            <Button
+              text="Delete profile"
+              variant="tertiary"
+              status="warning"
+              showLeftIcon={true}
+              leftIcon="trash-sharp"
+              onPress={() => {
+                Alert.alert(
+                  "Delete Profile",
+                  "Are you sure about deleting your profile?",
+                  [
+                    {
+                      text: "Cancel",
+                    },
+                    {
+                      text: "OK",
+                      onPress: async () => {
+                        await dispatch(deleteUserThunk(user));
+                        navigation.navigate("Login");
+                      },
+                    },
+                  ]
+                );
+              }}
+            />
+          </View>
           <Button text="Save changes" onPress={handleSaveChanges} />
           <Button
             text="Cancel changes"
