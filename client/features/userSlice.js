@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { validateLogin, updateUser } from "../data/users";
+import { validateLogin, updateUser, addMistake } from "../data/users";
 
 export const loginThunk = createAsyncThunk(
   "users/login",
@@ -18,6 +18,14 @@ export const updateUserThunk = createAsyncThunk(
   }
 );
 
+export const addMistakeThunk = createAsyncThunk(
+  "users/addMistake",
+  async ({ userId, exerciseId, lessonId }) => {
+    const updatedUser = await addMistake(userId, exerciseId, lessonId);
+    return updatedUser;
+  }
+);
+
 export const userSlice = createSlice({
   name: "users",
   initialState: {
@@ -29,6 +37,9 @@ export const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(updateUserThunk.fulfilled, (state, action) => {
+      state.user = action.payload;
+    });
+    builder.addCase(addMistakeThunk.fulfilled, (state, action) => {
       state.user = action.payload;
     });
   },

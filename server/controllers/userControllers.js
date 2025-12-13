@@ -47,6 +47,14 @@ const updateUser = async (req, res) => {
   res.json(updatedUser);
 };
 
+const addMistake = async (req, res) => {
+  const { id } = req.params;
+  const { exerciseId, lessonId } = req.body;
+  const updatedUser = await userService.addMistake(id, { exerciseId, lessonId });
+  delete updatedUser.hashedPassword; // Don't send password to client
+  res.json(updatedUser);
+};
+
 export const userControllers = {
   getUsers,
   getUserById,
@@ -54,4 +62,5 @@ export const userControllers = {
   login,
   deleteUser,
   updateUser,
+  addMistake,
 };

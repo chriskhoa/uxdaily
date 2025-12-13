@@ -30,4 +30,12 @@ const validateLogin = async (email, password) => {
   return user;
 };
 
-export { getUserById, createUser, updateUser, validateLogin };
+const addMistake = async (id, exerciseId, lessonId) => {
+  const updatedUser = await handlePost(`${USERS_ENDPOINT}/${id}/mistakes`, {
+    exerciseId,
+    lessonId,
+  });
+  return updatedUser;
+};
+
+export { getUserById, createUser, updateUser, validateLogin, addMistake };

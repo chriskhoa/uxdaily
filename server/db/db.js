@@ -85,6 +85,25 @@ const getFromCollectionByFieldValue = async (
   return doc;
 };
 
+// AI suggested API route to handle add mistakes
+const pushToArrayInCollection = async (
+  collectionName,
+  id,
+  arrayFieldName,
+  itemToPush
+) => {
+  if (!mongoClient) {
+    await init();
+  }
+  const query = { _id: new ObjectId(String(id)) };
+  const update = { $push: { [arrayFieldName]: itemToPush } };
+  const result = await theDb
+    .collection(collectionName)
+    .updateOne(query, update);
+  return result;
+};
+////
+
 export const db = {
   init,
   getAllInCollection,
@@ -92,6 +111,7 @@ export const db = {
   addToCollection,
   deleteFromCollectionById,
   updateToCollectionById,
+  pushToArrayInCollection,
   //   getAllInCollectionByUserId,
   getFromCollectionByFieldValue,
   USERS,

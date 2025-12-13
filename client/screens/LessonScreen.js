@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUserThunk } from "../features/userSlice";
+import { updateUserThunk, addMistakeThunk } from "../features/userSlice";
 import Typography from "../components/ui/Typography";
 import Button from "../components/ui/Button";
 import NavBar from "../components/ui/NavBar";
@@ -48,18 +48,38 @@ function LessonScreen({ navigation, route }) {
     ((currentExerciseIndex + 1) / totalExercises) * 100;
 
   // Handle answer checking
-  const handleCheckAnswer = () => {
+  const handleCheckAnswer = async () => {
+    let correct = false;
+
     if (currentExercise.type === "multiple_choice") {
-      const correct = currentExercise.correctAnswer.includes(selectedAnswer);
+      correct = currentExercise.correctAnswer.includes(selectedAnswer);
       setIsCorrect(correct);
       setIsAnswerChecked(true);
     } else if (currentExercise.type === "quiz") {
-      const correct = currentExercise.correctAnswers.some(
+      correct = currentExercise.correctAnswers.some(
         (answer) =>
           answer.toLowerCase().trim() === textAnswer.toLowerCase().trim()
       );
       setIsCorrect(correct);
       setIsAnswerChecked(true);
+    }
+
+    // Track mistake if answer is incorrect
+    if (!correct) {
+      const exerciseId = currentExercise.id;
+      const alreadyInMistakes = user.mistakes?.some(
+        (mistake) => mistake.exerciseId === exerciseId
+      );
+
+      if (!alreadyInMistakes) {
+        await dispatch(
+          addMistakeThunk({
+            userId: user.id,
+            exerciseId,
+            lessonId: lesson.id,
+          })
+        );
+      }
     }
   };
 
@@ -409,7 +429,11 @@ function QuizExercise({
         autoCorrect={false}
       />
       {isAnswerChecked && (
-        <Typography style={styles.incorrectText}>{correctAnswer}</Typography>
+        <Typography
+          style={isCorrect ? styles.correctText : styles.incorrectText}
+        >
+          {correctAnswer}
+        </Typography>
       )}
     </View>
   );

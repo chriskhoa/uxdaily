@@ -111,6 +111,13 @@ const deleteIt = async (id) => {
   return { deletedCount };
 };
 
+const addMistake = async (id, mistake) => {
+  if (!id) throw new Error("Null or undefined ID not allowed.");
+  await db.pushToArrayInCollection(db.USERS, id, "mistakes", mistake);
+  const updatedUser = await getById(id);
+  return updatedUser;
+};
+
 export const userService = {
   //   getAll,
   getById,
@@ -118,4 +125,5 @@ export const userService = {
   deleteIt,
   updateById,
   validateLogin,
+  addMistake,
 };
