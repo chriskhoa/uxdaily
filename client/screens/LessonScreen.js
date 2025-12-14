@@ -235,7 +235,11 @@ function LessonScreen({ navigation, route }) {
         <Button
           variant="secondary"
           text="Ask AI"
-          onPress={() => navigation.navigate("AI")}
+          onPress={() =>
+            navigation.navigate("AI", {
+              currentExercise,
+            })
+          }
         />
         <Button
           text={buttonConfig.text}

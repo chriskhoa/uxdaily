@@ -1,5 +1,6 @@
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:6790";
 const USERS_ENDPOINT = `${API_URL}/users`;
+const AI_ENDPOINT = `${API_URL}/ai`;
 
 const buildUrlWithQuery = (url, queryParams) => {
   const params = new URLSearchParams(queryParams);
@@ -90,4 +91,11 @@ const handleDelete = async (url, queryParams = null, token = null) => {
   }
 };
 
-export { handleGet, handlePost, handlePatch, handleDelete, USERS_ENDPOINT };
+export {
+  handleGet,
+  handlePost,
+  handlePatch,
+  handleDelete,
+  USERS_ENDPOINT,
+  AI_ENDPOINT,
+};

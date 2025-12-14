@@ -10,6 +10,8 @@ class User {
   };
   lessonsCompleted = [];
   mistakes = [];
+  // aiRequestCount = 0;
+  // aiRequestResetDate = new Date();
 
   constructor(userFields) {
     const id = userFields.id ?? String(Date.now());
@@ -32,6 +34,10 @@ class User {
 
     this.lessonsCompleted =
       userFields.lessonsCompleted ?? this.lessonsCompleted;
+    this.mistakes = userFields.mistakes ?? this.mistakes;
+    // this.aiRequestCount = userFields.aiRequestCount ?? this.aiRequestCount;
+    // this.aiRequestResetDate =
+    //   userFields.aiRequestResetDate ?? this.aiRequestResetDate;
   };
 
   static fromUserDocument = (userDocument) => {
