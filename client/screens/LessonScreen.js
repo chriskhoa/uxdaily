@@ -77,6 +77,7 @@ function LessonScreen({ navigation, route }) {
             userId: user.id,
             exerciseId,
             lessonId: lesson.id,
+            token: user.jwt,
           })
         );
       }
@@ -97,7 +98,7 @@ function LessonScreen({ navigation, route }) {
           id: user.id,
           lessonsCompleted: [...(user.lessonsCompleted || []), lesson.id],
         };
-        await dispatch(updateUserThunk(updates));
+        await dispatch(updateUserThunk({ user: updates, token: user.jwt }));
       }
 
       navigation.goBack();

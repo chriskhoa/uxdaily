@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { View, Switch, Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useFocusEffect } from "@react-navigation/native";
@@ -6,7 +6,11 @@ import TextField from "../components/ui/TextField";
 import Typography from "../components/ui/Typography";
 import Button from "../components/ui/Button";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUserThunk, deleteUserThunk } from "../features/userSlice";
+import {
+  updateUserThunk,
+  deleteUserThunk,
+  logout,
+} from "../features/userSlice";
 
 // Helper function to convert "HH:MM" string to Date object
 const timeStringToDate = (timeString) => {
@@ -30,27 +34,52 @@ function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
 
-  const [name, setName] = useState(user?.name || "");
-  const [email, setEmail] = useState(user?.email || "");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [soundEnabled, setSoundEnabled] = useState(
-    user?.settings?.soundEnabled || false
-  );
-  const [notificationsEnabled, setNotificationsEnabled] = useState(
-    user?.settings?.notificationsEnabled || false
-  );
-  const [reminderTime, setReminderTime] = useState(
-    user?.settings?.reminderTime
-      ? timeStringToDate(user.settings.reminderTime)
-      : new Date()
-  );
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [reminderTime, setReminderTime] = useState(new Date());
   const [edit, setEdit] = useState("disabled");
 
-  // AI supported code to reset edit mode whenever the screen comes into focus
+  // Sync local state with Redux user state whenever user changes
+  useEffect(() => {
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+      setSoundEnabled(user.settings?.soundEnabled || false);
+      setNotificationsEnabled(user.settings?.notificationsEnabled || false);
+      setReminderTime(
+        user.settings?.reminderTime
+          ? timeStringToDate(user.settings.reminderTime)
+          : new Date()
+      );
+    }
+  }, [user]);
+
+  const handleCancelChanges = useCallback(() => {
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+      setPassword("");
+      setSoundEnabled(user.settings?.soundEnabled || false);
+      setNotificationsEnabled(user.settings?.notificationsEnabled || false);
+      setReminderTime(
+        user.settings?.reminderTime
+          ? timeStringToDate(user.settings.reminderTime)
+          : new Date()
+      );
+      setEdit("disabled");
+    }
+  }, [user]);
+
+  // Always reset form to original values when navigating away from ProfileScreen
   useFocusEffect(
     useCallback(() => {
-      setEdit("disabled");
-    }, [])
+      return () => {
+        handleCancelChanges();
+      };
+    }, [handleCancelChanges])
   );
 
   const handleSaveChanges = async () => {
@@ -71,20 +100,9 @@ function ProfileScreen({ navigation }) {
       updates.password = password;
     }
 
-    await dispatch(updateUserThunk(updates));
+    await dispatch(updateUserThunk({ user: updates, token: user.jwt }));
     setEdit("disabled");
     setPassword(""); // Clear password field after save
-  };
-
-  const handleCancelChanges = () => {
-    // Reset form to original user values
-    setName(user.name);
-    setEmail(user.email);
-    setPassword("");
-    setSoundEnabled(user.settings.soundEnabled);
-    setNotificationsEnabled(user.settings.notificationsEnabled);
-    setReminderTime(timeStringToDate(user.settings.reminderTime));
-    setEdit("disabled");
   };
 
   return (
@@ -139,7 +157,7 @@ function ProfileScreen({ navigation }) {
           <Switch
             onValueChange={setSoundEnabled}
             value={soundEnabled}
-            disabled={edit === "disabled" ? true : false}
+            disabled={edit === "disabled"}
           />
         </View>
         <View
@@ -152,10 +170,10 @@ function ProfileScreen({ navigation }) {
           <Switch
             onValueChange={setNotificationsEnabled}
             value={notificationsEnabled}
-            disabled={edit === "disabled" ? true : false}
+            disabled={edit === "disabled"}
           />
         </View>
-        {notificationsEnabled ? (
+        {notificationsEnabled && (
           <View
             style={{
               flexDirection: "row",
@@ -175,8 +193,6 @@ function ProfileScreen({ navigation }) {
               }}
             />
           </View>
-        ) : (
-          <></>
         )}
       </View>
       {edit === "default" ? (
@@ -208,7 +224,9 @@ function ProfileScreen({ navigation }) {
                     {
                       text: "OK",
                       onPress: async () => {
-                        await dispatch(deleteUserThunk(user));
+                        await dispatch(
+                          deleteUserThunk({ user, token: user.jwt })
+                        );
                         navigation.navigate("Login");
                       },
                     },
@@ -237,7 +255,10 @@ function ProfileScreen({ navigation }) {
           <Button
             text="Logout"
             status="warning"
-            onPress={() => navigation.navigate("Login")}
+            onPress={() => {
+              dispatch(logout());
+              navigation.navigate("Login");
+            }}
           />
         </View>
       )}

@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-// import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 import { db } from "../db/db.js";
 import { User } from "../models/user.js";
@@ -50,21 +50,21 @@ const add = async (name, email, password) => {
 };
 
 /////////////////
-// let jwtPrivateKey, jwtPublicKey;
+let jwtPrivateKey, jwtPublicKey;
 
-// const loadKeys = () => {
-//   jwtPrivateKey = process.env.JWT_PRIVATE_KEY;
-//   jwtPublicKey = process.env.JWT_PUBLIC_KEY;
-// };
+const loadKeys = () => {
+  jwtPrivateKey = process.env.JWT_PRIVATE_KEY;
+  jwtPublicKey = process.env.JWT_PUBLIC_KEY;
+};
 
-// const generateToken = (userId) => {
-//   loadKeys();
-//   let data = {
-//     time: Date(),
-//     userId,
-//   };
-//   return jwt.sign(data, jwtPrivateKey, { algorithm: "RS256", expiresIn: "1h" });
-// };
+const generateToken = (userId) => {
+  loadKeys();
+  let data = {
+    time: Date(),
+    userId,
+  };
+  return jwt.sign(data, jwtPrivateKey, { algorithm: "RS256", expiresIn: "1h" });
+};
 /////////////////
 
 const validateLogin = async (email, password) => {
@@ -80,9 +80,8 @@ const validateLogin = async (email, password) => {
   const user = User.fromUserDocument(userDoc);
   const result = await bcrypt.compare(password, user.hashedPassword);
   if (result) {
-    // const jwt = generateToken(user.id);
-    // user.jwt = jwt;
-    // console.log(jwt);
+    const jwt = generateToken(user.id);
+    user.jwt = jwt;
     delete user.hashedPassword;
     return user;
   } else {

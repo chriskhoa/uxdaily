@@ -20,10 +20,12 @@ const createUser = async (name, email, password) => {
   return newUser;
 };
 
-const updateUser = async (id, updatedFields) => {
+const updateUser = async (id, updatedFields, token) => {
   const updatedUser = await handlePatch(
     `${USERS_ENDPOINT}/${id}`,
-    updatedFields
+    updatedFields,
+    null,
+    token
   );
   return updatedUser;
 };
@@ -36,15 +38,20 @@ const validateLogin = async (email, password) => {
   return user;
 };
 
-const deleteUser = async (id) => {
-  await handleDelete(`${USERS_ENDPOINT}/${id}`);
+const deleteUser = async (id, token) => {
+  await handleDelete(`${USERS_ENDPOINT}/${id}`, null, token);
 };
 
-const addMistake = async (id, exerciseId, lessonId) => {
-  const updatedUser = await handlePost(`${USERS_ENDPOINT}/${id}/mistakes`, {
-    exerciseId,
-    lessonId,
-  });
+const addMistake = async (id, exerciseId, lessonId, token) => {
+  const updatedUser = await handlePost(
+    `${USERS_ENDPOINT}/${id}/mistakes`,
+    {
+      exerciseId,
+      lessonId,
+    },
+    null,
+    token
+  );
   return updatedUser;
 };
 

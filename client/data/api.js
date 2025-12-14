@@ -6,11 +6,17 @@ const buildUrlWithQuery = (url, queryParams) => {
   return `${url}${params.toString()}`;
 };
 
-const handleGet = async (url, queryParams = null) => {
+const handleGet = async (url, queryParams = null, token = null) => {
   if (queryParams) {
     url = buildUrlWithQuery(url, queryParams);
   }
-  const response = await fetch(`${url}`);
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  const response = await fetch(`${url}`, { headers });
   if (response.ok) {
     return await response.json();
   } else {
@@ -19,15 +25,19 @@ const handleGet = async (url, queryParams = null) => {
   }
 };
 
-const handlePost = async (url, body, queryParams = null) => {
+const handlePost = async (url, body, queryParams = null, token = null) => {
   if (queryParams) {
     url = buildUrlWithQuery(url, queryParams);
   }
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
   const response = await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify(body),
   });
   if (response.ok) {
@@ -37,15 +47,19 @@ const handlePost = async (url, body, queryParams = null) => {
   }
 };
 
-const handlePatch = async (url, body, queryParams = null) => {
+const handlePatch = async (url, body, queryParams = null, token = null) => {
   if (queryParams) {
     url = buildUrlWithQuery(url, queryParams);
   }
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
   const response = await fetch(url, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify(body),
   });
   if (response.ok) {
@@ -55,15 +69,19 @@ const handlePatch = async (url, body, queryParams = null) => {
   }
 };
 
-const handleDelete = async (url, queryParams = null) => {
+const handleDelete = async (url, queryParams = null, token = null) => {
   if (queryParams) {
     url = buildUrlWithQuery(url, queryParams);
   }
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
   const response = await fetch(url, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
   });
   if (response.ok) {
     return response.statusText;
