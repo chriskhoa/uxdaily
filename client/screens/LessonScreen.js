@@ -232,15 +232,17 @@ function LessonScreen({ navigation, route }) {
 
       {/* Bottom Buttons */}
       <View style={styles.bottomContainer}>
-        <Button
-          variant="secondary"
-          text="Ask AI"
-          onPress={() =>
-            navigation.navigate("AI", {
-              currentExercise,
-            })
-          }
-        />
+        {(currentExercise.type === "reading" || isAnswerChecked) && (
+          <Button
+            variant="secondary"
+            text="Ask AI"
+            onPress={() =>
+              navigation.navigate("AI", {
+                currentExercise,
+              })
+            }
+          />
+        )}
         <Button
           text={buttonConfig.text}
           onPress={buttonConfig.action}

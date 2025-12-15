@@ -20,6 +20,7 @@ function AskAIScreen({ navigation, route }) {
       isSender: false,
     },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSendMessage = async (message) => {
     // Add user message
@@ -31,23 +32,42 @@ function AskAIScreen({ navigation, route }) {
     const updatedMessages = [...messages, newMessage];
     setMessages(updatedMessages);
 
-    // Transform messages to Anthropic format
-    const anthropicMessages = updatedMessages.map((msg) => ({
-      role: msg.isSender ? "user" : "assistant",
-      content: msg.text,
-    }));
-
-    // Get AI response based on updated conversation
-    const aiResponseText = await chat(anthropicMessages, systemPrompt);
-    console.log(aiResponseText);
-
-    // Wrap AI response in message object format
-    const aiMessage = {
-      id: updatedMessages.length + 1,
-      text: aiResponseText,
+    // Show loading indicator
+    setIsLoading(true);
+    const loadingMessage = {
+      id: "loading",
+      text: "Typing...",
       isSender: false,
+      isLoading: true,
     };
-    setMessages([...updatedMessages, aiMessage]);
+    setMessages([...updatedMessages, loadingMessage]);
+
+    try {
+      // Transform messages to Anthropic format
+      const anthropicMessages = updatedMessages.map((msg) => ({
+        role: msg.isSender ? "user" : "assistant",
+        content: msg.text,
+      }));
+
+      // Get AI response based on updated conversation
+      const aiResponseText = await chat(anthropicMessages, systemPrompt);
+
+      // Wrap AI response in message object format
+      const aiMessage = {
+        id: updatedMessages.length + 1,
+        text: aiResponseText,
+        isSender: false,
+      };
+
+      // Replace loading message with actual response
+      setMessages([...updatedMessages, aiMessage]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      // Remove loading message on error
+      setMessages(updatedMessages);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -92,6 +112,7 @@ function AskAIScreen({ navigation, route }) {
         <MessageInput
           placeholder="Type a message..."
           onSend={handleSendMessage}
+          disabled={isLoading}
         />
       </View>
     </View>
