@@ -1,10 +1,5 @@
 import { userService } from "../services/userService.js";
 
-const getUsers = async (req, res) => {
-  const allUsers = await userService.getAll();
-  res.json(allUsers);
-};
-
 const getUserById = async (req, res) => {
   const { id } = req.params;
   const theUser = await userService.getById(id);
@@ -56,7 +51,6 @@ const addMistake = async (req, res) => {
 };
 
 export const userControllers = {
-  getUsers,
   getUserById,
   createUser,
   login,
