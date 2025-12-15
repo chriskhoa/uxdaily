@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { View, Switch, Alert } from "react-native";
+import { View, Switch, Alert, Platform, TextInput } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useFocusEffect } from "@react-navigation/native";
 import TextField from "../components/ui/TextField";
@@ -182,16 +182,38 @@ function ProfileScreen({ navigation }) {
             }}
           >
             <Typography>Pick a daily reminder time</Typography>
-            <DateTimePicker
-              value={reminderTime}
-              mode="time"
-              is24Hour={true}
-              onChange={(event, selectedDate) => {
-                if (selectedDate) {
-                  setReminderTime(selectedDate);
-                }
-              }}
-            />
+            {Platform.OS === "web" ? (
+              <TextInput
+                type="time"
+                value={dateToTimeString(reminderTime)}
+                onChange={(e) => {
+                  const timeString = e.nativeEvent.text || e.target.value;
+                  if (timeString) {
+                    setReminderTime(timeStringToDate(timeString));
+                  }
+                }}
+                disabled={edit === "disabled"}
+                style={{
+                  padding: 8,
+                  borderWidth: 1,
+                  borderColor: edit === "disabled" ? "#ccc" : "#007AFF",
+                  borderRadius: 4,
+                  fontSize: 16,
+                }}
+              />
+            ) : (
+              <DateTimePicker
+                value={reminderTime}
+                mode="time"
+                is24Hour={true}
+                disabled={edit === "disabled"}
+                onChange={(_, selectedDate) => {
+                  if (selectedDate) {
+                    setReminderTime(selectedDate);
+                  }
+                }}
+              />
+            )}
           </View>
         )}
       </View>
@@ -200,6 +222,7 @@ function ProfileScreen({ navigation }) {
           style={{
             width: "80%",
             gap: 10,
+            marginBottom: 10,
           }}
         >
           <View
@@ -214,24 +237,32 @@ function ProfileScreen({ navigation }) {
               showLeftIcon={true}
               leftIcon="trash-sharp"
               onPress={() => {
-                Alert.alert(
-                  "Delete Profile",
-                  "Are you sure about deleting your profile?",
-                  [
-                    {
-                      text: "Cancel",
-                    },
-                    {
-                      text: "OK",
-                      onPress: async () => {
-                        await dispatch(
-                          deleteUserThunk({ user, token: user.jwt })
-                        );
-                        navigation.navigate("Login");
+                const handleDelete = async () => {
+                  await dispatch(deleteUserThunk({ user, token: user.jwt }));
+                  navigation.navigate("Login");
+                };
+
+                if (Platform.OS === "web") {
+                  if (
+                    window.confirm("Are you sure about deleting your profile?")
+                  ) {
+                    handleDelete();
+                  }
+                } else {
+                  Alert.alert(
+                    "Delete Profile",
+                    "Are you sure about deleting your profile?",
+                    [
+                      {
+                        text: "Cancel",
                       },
-                    },
-                  ]
-                );
+                      {
+                        text: "OK",
+                        onPress: handleDelete,
+                      },
+                    ]
+                  );
+                }
               }}
             />
           </View>
