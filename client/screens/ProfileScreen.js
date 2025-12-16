@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { View, Switch, Alert, Platform, TextInput } from "react-native";
+import * as Notifications from "expo-notifications";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useFocusEffect } from "@react-navigation/native";
 import TextField from "../components/ui/TextField";
@@ -98,6 +99,48 @@ function ProfileScreen({ navigation }) {
     // Only include password if it was changed
     if (password) {
       updates.password = password;
+    }
+
+    // Cancel all existing scheduled notifications first
+    await Notifications.cancelAllScheduledNotificationsAsync();
+
+    // Schedule notification if it is enabled
+    if (notificationsEnabled) {
+      // Request notification permissions
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+
+      if (finalStatus !== "granted") {
+        if (Platform.OS === "web") {
+          alert("Failed to get notification permissions!");
+        } else {
+          Alert.alert(
+            "Permission Required",
+            "Failed to get notification permissions. Please enable notifications in your device settings."
+          );
+        }
+        return;
+      }
+
+      // Schedule the daily notification
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "UXDaily",
+          body: "Time for your daily dose of UX",
+        },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
+          hour: reminderTime.getHours(),
+          minute: reminderTime.getMinutes(),
+          repeats: true,
+        },
+      });
     }
 
     await dispatch(updateUserThunk({ user: updates, token: user.jwt }));
