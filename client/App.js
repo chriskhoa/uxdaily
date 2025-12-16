@@ -6,6 +6,7 @@ import SignupScreen from "./screens/SignupScreen";
 import MainScreen from "./screens/MainScreen";
 import LessonScreen from "./screens/LessonScreen";
 import AskAIScreen from "./screens/AskAIScreen";
+import MistakeScreen from "./screens/MistakeScreen";
 
 import { Provider } from "react-redux";
 import store from "./app/store";
@@ -25,6 +26,7 @@ export default function App() {
           <Stack.Screen name="Main" component={MainScreen} />
           <Stack.Screen name="Lesson" component={LessonScreen} />
           <Stack.Screen name="AI" component={AskAIScreen} />
+          <Stack.Screen name="Mistake" component={MistakeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
