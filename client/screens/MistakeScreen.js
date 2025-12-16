@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   View,
-  Text,
   ScrollView,
   TouchableOpacity,
   TextInput,
@@ -21,33 +20,10 @@ function MistakeScreen({ navigation, route }) {
   const user = useSelector((state) => state.users.user);
 
   // State management
-  //   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [textAnswer, setTextAnswer] = useState("");
   const [isAnswerChecked, setIsAnswerChecked] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-
-  //   if (!lesson || !lesson.exercises || lesson.exercises.length === 0) {
-  //     return (
-  //       <View style={styles.container}>
-  //         <View style={{ marginTop: 70, width: "100%" }}>
-  //           <NavBar
-  //             title="Lesson"
-  //             showBorder={false}
-  //             onLeftPress={() => navigation.goBack()}
-  //           />
-  //         </View>
-  //         <View style={styles.errorContainer}>
-  //           <Typography variant="body">No lesson data available</Typography>
-  //         </View>
-  //       </View>
-  //     );
-  //   }
-
-  //   const currentExercise = lesson.exercises[currentExerciseIndex];
-  //   const totalExercises = lesson.exercises.length;
-  //   const progressPercentage =
-  //     ((currentExerciseIndex + 1) / totalExercises) * 100;
 
   // Handle answer checking
   const handleCheckAnswer = async () => {
@@ -78,40 +54,14 @@ function MistakeScreen({ navigation, route }) {
     }
   };
 
-  // Handle next exercise
+  // Handle complete exercise
   const handleComplete = async () => {
-    // if (currentExerciseIndex < totalExercises - 1) {
-    //   setCurrentExerciseIndex(currentExerciseIndex + 1);
-    //   resetExerciseState();
-    // } else {
-    //   // Lesson completed - only update if not already completed
-    //   const isAlreadyCompleted = user?.lessonsCompleted?.includes(lesson.id);
-
-    //   if (!isAlreadyCompleted && user) {
-    //     const updates = {
-    //       id: user.id,
-    //       lessonsCompleted: [...(user.lessonsCompleted || []), lesson.id],
-    //     };
-    //     await dispatch(updateUserThunk({ user: updates, token: user.jwt }));
-    //   }
-
     navigation.goBack();
   };
-
-  // Reset state when moving to next exercise
-  //   const resetExerciseState = () => {
-  //     setSelectedAnswer(null);
-  //     setTextAnswer("");
-  //     setIsAnswerChecked(false);
-  //     setIsCorrect(false);
-  //   };
 
   // Render different exercise types
   const renderExerciseContent = () => {
     switch (currentExercise.type) {
-      //   case "reading":
-      //     return <ReadingExercise content={currentExercise.content} />;
-
       case "multiple_choice":
         return (
           <MultipleChoiceExercise
@@ -143,14 +93,6 @@ function MistakeScreen({ navigation, route }) {
 
   // Determine button text and action
   const getButtonConfig = () => {
-    // if (currentExercise.type === "reading") {
-    //   return {
-    //     text: "Continue",
-    //     action: handleNext,
-    //     disabled: false,
-    //   };
-    // }
-
     if (!isAnswerChecked) {
       return {
         text: "Check",
@@ -181,21 +123,6 @@ function MistakeScreen({ navigation, route }) {
           onLeftPress={() => navigation.goBack()}
         />
       </View>
-
-      {/* Progress Bar */}
-      {/* <View style={styles.progressContainer}>
-        <View style={styles.progressBarBackground}>
-          <View
-            style={[
-              styles.progressBarFill,
-              { width: `${progressPercentage}%` },
-            ]}
-          />
-        </View>
-        <Typography variant="caption" style={styles.progressText}>
-          {currentExerciseIndex + 1} / {totalExercises}
-        </Typography>
-      </View> */}
 
       {/* Exercise Content */}
       <ScrollView
@@ -244,107 +171,6 @@ function MistakeScreen({ navigation, route }) {
     </View>
   );
 }
-
-// Reading Exercise Component
-// function ReadingExercise({ content }) {
-//   // Render a single line with inline bold text
-//   const renderLineWithBold = (line, key) => {
-//     const parts = line.split(/(\*\*.*?\*\*)/g).filter((part) => part !== "");
-//     return (
-//       <Text key={key} style={styles.paragraph}>
-//         {parts.map((part, i) => {
-//           if (part.startsWith("**") && part.endsWith("**")) {
-//             return (
-//               <Text key={i} style={styles.inlineBold}>
-//                 {part.replace(/\*\*/g, "")}
-//               </Text>
-//             );
-//           }
-//           return <Text key={i}>{part}</Text>;
-//         })}
-//       </Text>
-//     );
-//   };
-
-//   // Simple markdown-like rendering
-//   const renderContent = () => {
-//     const lines = content.split("\n");
-//     return lines.map((line, index) => {
-//       // Headings
-//       if (line.startsWith("# ")) {
-//         return (
-//           <Text key={index} style={styles.heading1}>
-//             {line.replace("# ", "")}
-//           </Text>
-//         );
-//       } else if (line.startsWith("## ")) {
-//         return (
-//           <Text key={index} style={styles.heading2}>
-//             {line.replace("## ", "")}
-//           </Text>
-//         );
-//       }
-//       // Bullet points (handle inline bold in bullets)
-//       else if (line.startsWith("- ")) {
-//         const bulletText = line.replace("- ", "");
-//         if (bulletText.includes("**")) {
-//           const parts = bulletText
-//             .split(/(\*\*.*?\*\*)/g)
-//             .filter((part) => part !== "");
-//           return (
-//             <Text key={index} style={styles.bulletPoint}>
-//               {"• "}
-//               {parts.map((part, i) => {
-//                 if (part.startsWith("**") && part.endsWith("**")) {
-//                   return (
-//                     <Text key={i} style={styles.inlineBold}>
-//                       {part.replace(/\*\*/g, "")}
-//                     </Text>
-//                   );
-//                 }
-//                 return <Text key={i}>{part}</Text>;
-//               })}
-//             </Text>
-//           );
-//         }
-//         return (
-//           <Text key={index} style={styles.bulletPoint}>
-//             • {bulletText}
-//           </Text>
-//         );
-//       }
-//       // Empty lines
-//       else if (line.trim() === "") {
-//         return <View key={index} style={styles.spacer} />;
-//       }
-//       // Lines that are entirely bold
-//       else if (
-//         line.startsWith("**") &&
-//         line.endsWith("**") &&
-//         !line.slice(2, -2).includes("**")
-//       ) {
-//         return (
-//           <Text key={index} style={styles.bold}>
-//             {line.replace(/\*\*/g, "")}
-//           </Text>
-//         );
-//       }
-//       // Regular paragraphs with potential inline bold
-//       else {
-//         if (line.includes("**")) {
-//           return renderLineWithBold(line, index);
-//         }
-//         return (
-//           <Text key={index} style={styles.paragraph}>
-//             {line}
-//           </Text>
-//         );
-//       }
-//     });
-//   };
-
-//   return <View style={styles.readingContainer}>{renderContent()}</View>;
-// }
 
 function FindExercise(lessonId, exerciseId) {
   const lesson = lessons.find((item) => item.id === lessonId);

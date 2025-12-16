@@ -11,7 +11,6 @@ function SignupScreen({ navigation, route }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  // const [confirmedPass, setConfirmedPass] = useState("");
 
   return (
     <View
@@ -57,17 +56,6 @@ function SignupScreen({ navigation, route }) {
           onChangeText={setPassword}
           secureTextEntry={true}
         ></TextField>
-        {/* <TextField
-          placeholder="Confirm password"
-          secureTextEntry={true}
-          value={confirmedPass}
-          onChangeText={setConfirmedPass}
-        ></TextField> */}
-        {/* {password !== confirmedPass ? (
-          <Typography color={"#ff616d"}>Passwords must match</Typography>
-        ) : (
-          <></>
-        )} */}
         {error ? <Typography color={"#ff616d"}>{error}</Typography> : null}
       </View>
       <View

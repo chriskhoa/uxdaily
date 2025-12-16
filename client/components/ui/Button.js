@@ -1,3 +1,4 @@
+//fully ai-gen UI component
 import React from "react";
 import {
   TouchableOpacity,

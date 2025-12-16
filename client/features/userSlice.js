@@ -54,14 +54,12 @@ export const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(updateUserThunk.fulfilled, (state, action) => {
-      // Preserve JWT token when updating user
       state.user = { ...action.payload, jwt: state.user.jwt };
     });
     builder.addCase(deleteUserThunk.fulfilled, (state, action) => {
       state.user = null;
     });
     builder.addCase(addMistakeThunk.fulfilled, (state, action) => {
-      // Preserve JWT token when adding mistake
       state.user = { ...action.payload, jwt: state.user.jwt };
     });
   },

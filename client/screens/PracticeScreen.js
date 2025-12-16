@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import { View, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUserThunk } from "../features/userSlice";
 import Typography from "../components/ui/Typography";
 import Button from "../components/ui/Button";
 
 function PracticeScreen({ navigation, route }) {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
   const [mistakes, setMistakes] = useState([]);
 

@@ -4,11 +4,6 @@ import jwt from "jsonwebtoken";
 import { db } from "../db/db.js";
 import { User } from "../models/user.js";
 
-// const getAll = async () => {
-//   const userDocs = await db.getAllInCollection(db.USERS);
-//   return userDocs.map((uDoc) => User.fromUserDocument(uDoc));
-// };
-
 const getById = async (id) => {
   if (!id) throw new Error("Null or undefined ID not allowed.");
   const userDoc = await db.getFromCollectionById(db.USERS, id);
@@ -118,7 +113,6 @@ const addMistake = async (id, mistake) => {
 };
 
 export const userService = {
-  //   getAll,
   getById,
   add,
   deleteIt,

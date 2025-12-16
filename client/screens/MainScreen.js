@@ -1,4 +1,3 @@
-// with 3 bottom tabs Profile, Home, Practice in the exact order
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 

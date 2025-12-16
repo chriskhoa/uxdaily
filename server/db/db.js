@@ -3,9 +3,7 @@ import { MongoClient, ObjectId } from "mongodb";
 let mongoClient = null;
 let theDb = null;
 
-// coll names
 const USERS = "users";
-// const POSTS = "posts";
 
 const init = async () => {
   const mongoURI = process.env.MONGO_URI;
@@ -63,14 +61,6 @@ const deleteFromCollectionById = async (collectionName, id) => {
   return result;
 };
 
-// const getAllInCollectionByUserId = async (collectionName, userId) => {
-//   if (!mongoClient) {
-//     await init();
-//   }
-//   const doc = await theDb.collection(collectionName).find({ authorId: userId });
-//   return doc.toArray();
-// };
-
 const getFromCollectionByFieldValue = async (
   collectionName,
   fieldName,
@@ -112,8 +102,6 @@ export const db = {
   deleteFromCollectionById,
   updateToCollectionById,
   pushToArrayInCollection,
-  //   getAllInCollectionByUserId,
   getFromCollectionByFieldValue,
   USERS,
-  //   POSTS,
 };

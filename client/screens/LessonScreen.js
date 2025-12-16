@@ -1,3 +1,4 @@
+// AI generated the base but I did a lot of edit to make it works nicely.
 import { useState } from "react";
 import {
   View,

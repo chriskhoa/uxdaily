@@ -1,3 +1,4 @@
+//fully ai-gen UI component
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Button from "./Button";

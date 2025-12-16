@@ -1,3 +1,4 @@
+//fully ai-gen UI component
 import React, { useState } from "react";
 import {
   View,
